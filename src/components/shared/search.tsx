@@ -68,7 +68,7 @@ export default function Search({ closeModal }: SearchProps) {
 					onChange={handleInputChange}
 				/>
 			</div>
-			<div className="mt-5 flex flex-col gap-4">
+			<div className="mt-5 flex flex-col gap-4 max-h-96 overflow-y-auto overflow-x-hidden ">
 				{loading ? (
 					<div className="flex justify-center">
 						<LoadingSpinner />
