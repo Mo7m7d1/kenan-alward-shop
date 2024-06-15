@@ -37,11 +37,11 @@ export default async function page({ params }: any) {
 								<p>{product?.description}</p>
 							</div>
 							<div className="flex items-center gap-4">
-								<div className="flex items-center gap-0.5">
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
+								<div className="flex items-center gap-0.5 text-yellow-500">
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
 									<StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
 								</div>
 								<div className="text-4xl font-bold">
@@ -62,10 +62,10 @@ export default async function page({ params }: any) {
 							</div>
 							<div className="flex items-center gap-4">
 								<div className="flex items-center gap-0.5">
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-primary" />
-									<StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
+									<StarIcon className="h-5 w-5 fill-yellow-500" />
 									<StarIcon className="h-5 w-5 fill-muted stroke-muted-foreground" />
 								</div>
 								<div className="text-4xl font-bold">
