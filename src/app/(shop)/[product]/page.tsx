@@ -14,6 +14,7 @@ export default async function page({ params }: any) {
 	const similarProducts = await getProducts({
 		category: product?.categories[0].id,
 		take: 3,
+		currentProductId: product.id,
 	});
 	return (
 		<>

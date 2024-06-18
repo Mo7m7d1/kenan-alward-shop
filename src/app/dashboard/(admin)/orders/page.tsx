@@ -29,13 +29,7 @@ import { formatDateArabic, formatMoney } from "@/lib/utils";
 import { getOrders } from "@/server/models/order";
 import { Badge } from "@/components/ui/badge";
 import { OrderModal } from "./order-modal";
-
-export const orderStatus = {
-	Processing: "جاري المعالجة",
-	Shipped: "تم الشحن",
-	Delivered: "تم التوصيل",
-	Cancelled: "ملغي",
-};
+import { orderStatus } from "@/lib/constants";
 
 export default async function page() {
 	const orders = await getOrders();
@@ -45,8 +39,6 @@ export default async function page() {
 			dir="rtl"
 		>
 			<div className="ml-auto flex  items-center gap-2">
-				{/* <OrderModal /> */}
-
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button variant="outline" size="sm" className="h-8 gap-1">

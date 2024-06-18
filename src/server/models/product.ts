@@ -8,6 +8,7 @@ import { normalizeArabic } from "@/lib/utils";
 type FilterProps = {
 	category?: string;
 	take?: number;
+	currentProductId?: string;
 } | null;
 
 export const getProducts = cache(async (filters: FilterProps) => {
@@ -17,6 +18,11 @@ export const getProducts = cache(async (filters: FilterProps) => {
 				orderBy: { createdAt: "desc" },
 				where: {
 					categories: { every: { id: filters.category } },
+					id: {
+						not: filters.currentProductId
+							? filters.currentProductId
+							: undefined,
+					},
 				},
 				include: {
 					orders: {

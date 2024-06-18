@@ -1,15 +1,7 @@
-import { Link } from "next-view-transitions";
-import {
-	Activity,
-	ArrowUpRight,
-	CreditCard,
-	DollarSign,
-	Users,
-} from "lucide-react";
+import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
@@ -27,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { getReports } from "@/server/models/reports";
 import { formatDateArabic, formatMoney } from "@/lib/utils";
-import { orderStatus } from "./orders/page";
+import { orderStatus } from "@/lib/constants";
 
 export default async function Page() {
 	const data = await getReports();

@@ -1,5 +1,6 @@
 "use server";
 
+import { ShippingCost, TAX_RATE } from "@/lib/constants";
 import { db } from "../db";
 import { getProduct } from "./product";
 import { getServerAuth } from "@/lib/utils";
@@ -35,9 +36,8 @@ export async function checkout({
 	}
 
 	try {
-		let total = 0;
-		const taxRate = 0.05; // Example tax rate
-		const shippingCost = 10; // Example fixed shipping cost
+		let totalPrice = 0;
+		let totalDiscount = 0;
 
 		// Calculate the total amount and update stock
 		for (const product of products) {
@@ -51,7 +51,12 @@ export async function checkout({
 				return { error: `Insufficient stock for product ${p.title}` };
 			}
 
-			total += p.price * product.quantity;
+			const productPrice = p.price * product.quantity;
+			const productDiscount =
+				((p.discount || 0) / 100) * p.price * product.quantity;
+
+			totalPrice += productPrice;
+			totalDiscount += productDiscount;
 
 			// Reduce the stock of the product
 			await db.product.update({
@@ -60,19 +65,20 @@ export async function checkout({
 			});
 		}
 
-		const tax = total * taxRate;
-		const payable = total + tax + shippingCost;
+		const priceAfterDiscount = totalPrice - totalDiscount;
+		const tax = priceAfterDiscount * TAX_RATE;
+		const payable = priceAfterDiscount + tax + ShippingCost;
 
 		// Insert the order
 		const order = await db.order.create({
 			data: {
 				user: { connect: { id: userId } },
 				status: "Processing",
-				total,
-				shipping: shippingCost,
+				total: totalPrice,
+				shipping: ShippingCost,
 				payable,
 				tax,
-				discount: 0, // Assuming no discount for now
+				discount: totalDiscount,
 				isPaid: true,
 				Address: { connect: { id: address } },
 				// paymentType : {connect: {id: paymentType}},
@@ -87,7 +93,7 @@ export async function checkout({
 					productId: product.productId,
 					count: product.quantity,
 					price: p?.price ?? 0,
-					discount: 0, // Assuming no discount for now
+					discount: p?.discount ?? 0,
 				},
 			});
 		}

@@ -4,6 +4,7 @@ import Services from "@/components/sections/services";
 import HomeCarousel, {
 	HomeCarouselSkeleton,
 } from "@/components/shared/home-carousel";
+import LoadingSpinner from "@/components/shared/loading-spinner";
 import Image from "next/image";
 import { Suspense } from "react";
 
@@ -25,11 +26,13 @@ export default function page() {
 				quality={100}
 			/>
 
-			<Suspense key={Math.random()} fallback={<HomeCarouselSkeleton />}>
+			<Suspense fallback={<HomeCarouselSkeleton />}>
 				<HomeCarousel />
 			</Suspense>
 
-			<CategoriesProducts />
+			<Suspense fallback={<LoadingSpinner />}>
+				<CategoriesProducts />
+			</Suspense>
 
 			<Services />
 

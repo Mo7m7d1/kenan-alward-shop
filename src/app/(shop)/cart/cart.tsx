@@ -18,8 +18,7 @@ import CartButton from "../[product]/components/cart-button";
 import { useSession } from "next-auth/react";
 import { LoginModal } from "@/components/shared/login-modal";
 import { useCart } from "@/components/shared/cart-context";
-
-const TAX_RATE = 0.07; // 7% tax
+import { TAX_RATE } from "@/lib/constants";
 
 const fetchProducts = async (productIds: string[]) => {
 	if (productIds.length === 0) return [];

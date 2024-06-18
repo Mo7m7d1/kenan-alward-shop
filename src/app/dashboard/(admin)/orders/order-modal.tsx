@@ -28,17 +28,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import LoadingSpinner from "@/components/shared/loading-spinner";
-import { createOrder, updateOrder } from "@/server/models/order";
-import { Prisma, OrderStatusEnum } from "@prisma/client";
-import { Input } from "@/components/ui/input";
+import { updateOrder } from "@/server/models/order";
+import { OrderStatusEnum } from "@prisma/client";
 import { Checkbox } from "@/components/ui/checkbox";
-
-const orderStatus = {
-	Processing: "جاري المعالجة",
-	Shipped: "تم الشحن",
-	Delivered: "تم التوصيل",
-	Cancelled: "ملغي",
-};
+import { orderStatus } from "@/lib/constants";
 
 const zOrder = z.object({
 	status: z.nativeEnum(OrderStatusEnum, { required_error: "الحالة مطلوبة" }),

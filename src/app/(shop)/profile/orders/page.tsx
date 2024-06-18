@@ -18,6 +18,7 @@ import { formatDateArabic, formatMoney, getServerAuth } from "@/lib/utils";
 import { getCustomerOrders } from "@/server/models/user";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
+import { orderStatus } from "@/lib/constants";
 
 export const metadata = {
 	title: "كنان الورد: طلباتي",
@@ -52,13 +53,6 @@ async function CustomerOrdersTable() {
 	if (!res?.success) {
 		return notFound();
 	}
-
-	const orderStatus = {
-		Processing: "جاري المعالجة",
-		Shipped: "تم الشحن",
-		Delivered: "تم التوصيل",
-		Cancelled: "ملغي",
-	};
 
 	return (
 		<Table className="scroll-my-14">
