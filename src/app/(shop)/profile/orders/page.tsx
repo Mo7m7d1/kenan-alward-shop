@@ -14,10 +14,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { formatDateArabic, formatMoney } from "@/lib/utils";
-import { authOptions } from "@/server/auth";
+import { formatDateArabic, formatMoney, getServerAuth } from "@/lib/utils";
 import { getCustomerOrders } from "@/server/models/user";
-import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -27,7 +25,7 @@ export const metadata = {
 };
 
 export default async function page() {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	if (!session?.user) {
 		return redirect("/");
 	}

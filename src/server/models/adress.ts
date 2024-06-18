@@ -3,12 +3,11 @@
 import { Prisma } from "@prisma/client";
 import { db } from "../db";
 import { revalidatePath } from "next/cache";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth";
+import { getServerAuth } from "@/lib/utils";
 
 export async function getAddresses() {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerAuth();
 		if (!session?.user) return;
 
 		return await db.address.findMany({

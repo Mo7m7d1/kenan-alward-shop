@@ -1,8 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/server/auth";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export async function getServerAuth() {
+	return await getServerSession(authOptions);
 }
 
 export function isVariableValid(variable: any) {
@@ -60,4 +66,15 @@ export const formatMoney = (amount: number) => {
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 	})} ر.س`;
+};
+
+// Function to normalize Arabic text
+export const normalizeArabic = (text: string): string => {
+	return text
+		.replace(/[إأٱآا]/g, "ا")
+		.replace(/[ئء]/g, "ء")
+		.replace(/ه/g, "ة")
+		.replace(/ة/g, "ه")
+		.replace(/[ؤ]/g, "و")
+		.replace(/[ى]/g, "ي");
 };

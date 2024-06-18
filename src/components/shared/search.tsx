@@ -26,27 +26,26 @@ export default function Search({ closeModal }: SearchProps) {
 	const [results, setResults] = useState<Product[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [searched, setSearched] = useState<boolean>(false); // Track if search has been conducted
+	const [prevQuery, setPrevQuery] = useState<string>(""); // Track previous search query
 
 	const handleSearch = debounce(async (query: string) => {
-		if (query.length > 2) {
+		if (query.length > 1 && query !== prevQuery) {
 			setLoading(true);
-			const products = await searchProducts(query);
+			const products = await searchProducts(query.trim());
 			setResults(products || []);
 			setLoading(false);
 			setSearched(true); // Update searched state after search is conducted
-		} else {
+			setPrevQuery(query); // Update previous query
+		} else if (query.length <= 1) {
 			setResults([]);
 			setLoading(false);
-			setSearched(false); // Reset searched state if query is less than 3 characters
+			setSearched(false); // Reset searched state if query is less than 2 characters
 		}
-	}, 300); // 300ms debounce
+	}, 400); // 400ms debounce
 
 	useEffect(() => {
-		if (query.length > 2) {
-			handleSearch(query);
-		} else {
-			setResults([]);
-			setSearched(false); // Reset searched state if query is less than 3 characters
+		if (query.trim() !== prevQuery.trim()) {
+			handleSearch(query.trim());
 		}
 	}, [query]);
 

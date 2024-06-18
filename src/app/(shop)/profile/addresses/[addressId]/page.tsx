@@ -1,9 +1,8 @@
 import { getAddress } from "@/server/models/adress";
 import { AddressForm } from "./components/address-form";
 import { Card, CardContent } from "@/components/ui/card";
-import { authOptions } from "@/server/auth";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerAuth } from "@/lib/utils";
 
 export const metadata = {
 	title: "كنان الورد: عناويني",
@@ -15,7 +14,7 @@ export default async function AddressPage({
 }: {
 	params: { addressId: string };
 }) {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	if (!session?.user) {
 		return redirect("/");
 	}

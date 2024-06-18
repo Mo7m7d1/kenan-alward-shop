@@ -3,6 +3,7 @@
 import { Prisma } from "@prisma/client";
 import { db } from "../db";
 import { cache } from "react";
+import { normalizeArabic } from "@/lib/utils";
 
 type FilterProps = {
 	category?: string;
@@ -64,24 +65,31 @@ export const getProduct = cache(async (id: string) => {
 
 export const searchProducts = cache(async (query: string) => {
 	try {
+		if (query.length < 2) {
+			return [];
+		}
+
+		// Normalize the query
+		const normalizedQuery = normalizeArabic(query);
+
 		const products = await db.product.findMany({
 			where: {
 				OR: [
 					{
 						title: {
-							contains: query,
-							mode: "insensitive", // Case insensitive search
-						},
-					},
-					{
-						title: {
-							startsWith: query,
+							contains: normalizedQuery,
 							mode: "insensitive",
 						},
 					},
 					{
 						title: {
-							contains: query.split("").join(".*"),
+							startsWith: normalizedQuery,
+							mode: "insensitive",
+						},
+					},
+					{
+						title: {
+							endsWith: normalizedQuery,
 							mode: "insensitive",
 						},
 					},
@@ -97,7 +105,13 @@ export const searchProducts = cache(async (query: string) => {
 			orderBy: { price: "asc" },
 		});
 
-		return products?.map((p) => ({
+		// Normalize the titles and filter again for any approximate matches
+		const refinedResults = products.filter((product) => {
+			const normalizedTitle = normalizeArabic(product.title);
+			return normalizedTitle.includes(normalizedQuery);
+		});
+
+		return refinedResults.map((p) => ({
 			id: p.id,
 			title: p.title,
 			price: p.price,
@@ -105,6 +119,7 @@ export const searchProducts = cache(async (query: string) => {
 		}));
 	} catch (error) {
 		console.error("Error searching products:", error);
+		return [];
 	}
 });
 

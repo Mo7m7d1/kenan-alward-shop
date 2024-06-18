@@ -6,9 +6,8 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import CheckoutForm from "./checkout-form";
-import { authOptions } from "@/server/auth";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerAuth } from "@/lib/utils";
 
 export const metadata = {
 	title: "كنان الورد: الدفع",
@@ -16,7 +15,7 @@ export const metadata = {
 };
 
 export default async function page() {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	if (!session?.user) {
 		return redirect("/");
 	}

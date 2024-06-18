@@ -6,9 +6,8 @@ import { getAddresses } from "@/server/models/adress";
 import { Suspense } from "react";
 import AddressesTable from "./components/table";
 import { Heading } from "@/components/ui/heading";
-import { authOptions } from "@/server/auth";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerAuth } from "@/lib/utils";
 
 export const metadata = {
 	title: "كنان الورد: عناويني",
@@ -16,7 +15,7 @@ export const metadata = {
 };
 
 export default async function AddressesPage() {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	if (!session?.user) {
 		return redirect("/");
 	}

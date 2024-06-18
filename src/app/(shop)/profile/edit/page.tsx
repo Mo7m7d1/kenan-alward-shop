@@ -8,8 +8,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
+import { getServerAuth } from "@/lib/utils";
 
 export const metadata = {
 	title: "كنان الورد: تعديل الملف الشخصي",
@@ -17,7 +16,7 @@ export const metadata = {
 };
 
 export default async function page() {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	if (!session?.user) {
 		return redirect("/");
 	}

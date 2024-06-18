@@ -7,8 +7,7 @@ import { redirect } from "next/navigation";
 import z from "zod";
 import { db } from "../db";
 import { Prisma } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth";
+import { getServerAuth } from "@/lib/utils";
 
 const zLoginSchema = z.object({
 	email: z.string().min(1, "الاسم مطلوب"),
@@ -121,7 +120,7 @@ export async function getUsers() {
 
 export async function getUser() {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerAuth();
 		if (!session?.user) return { success: false };
 
 		const user = await db.user.findUnique({ where: { id: session.user.id } });
@@ -178,7 +177,7 @@ export async function deleteUser(id: string): Promise<UserResponse> {
 
 export async function getCustomerOrders() {
 	try {
-		const session = await getServerSession(authOptions);
+		const session = await getServerAuth();
 		if (!session?.user.id) {
 			return { success: false, message: "المستخدم عير موجود" };
 		}

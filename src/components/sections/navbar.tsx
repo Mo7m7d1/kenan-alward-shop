@@ -2,15 +2,14 @@ import { Button } from "@/components/ui/button";
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
 import { Link } from "next-view-transitions";
 import { UserNav } from "../shared/user";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/server/auth";
 import { LoginModal } from "../shared/login-modal";
 import Image from "next/image";
 import NavbarCartButton from "./navbar-cart-button";
 import SearchModal from "../shared/search-modal";
+import { getServerAuth } from "@/lib/utils";
 
 export default async function Navbar() {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
 	const links = [
 		{ href: "/", label: "الرئيسية" },
 		{ href: "/categories", label: "الأقسام" },

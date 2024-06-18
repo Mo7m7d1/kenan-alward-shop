@@ -1,8 +1,8 @@
 "use server";
-import { getServerSession } from "next-auth";
+
 import { db } from "../db";
-import { authOptions } from "../auth";
 import { getProduct } from "./product";
+import { getServerAuth } from "@/lib/utils";
 
 type CartItems = {
 	productId: string;
@@ -18,7 +18,11 @@ export async function checkout({
 	paymentType: string;
 	products: CartItems;
 }) {
-	const session = await getServerSession(authOptions);
+	const session = await getServerAuth();
+	if (!session?.user) {
+		return { error: "المستخدم غير مسجل مدخول!" };
+	}
+
 	const userId = (
 		await db.user.findUnique({
 			where: { email: session?.user?.email ?? "" },
@@ -27,7 +31,7 @@ export async function checkout({
 	)?.id;
 
 	if (!userId) {
-		return { error: "حصل خطأ ما!" };
+		return { error: "المتسخدم غير موجود!" };
 	}
 
 	try {
@@ -71,7 +75,7 @@ export async function checkout({
 				discount: 0, // Assuming no discount for now
 				isPaid: true,
 				Address: { connect: { id: address } },
-				// paymentType,
+				// paymentType : {connect: {id: paymentType}},
 			},
 		});
 
