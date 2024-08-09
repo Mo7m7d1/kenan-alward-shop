@@ -15,6 +15,18 @@ export async function getCategories() {
 	}
 }
 
+export async function getPaginatedCategories(page = 1, limit = 10) {
+	const offset = (page - 1) * limit;
+	const categories = await db.category.findMany({
+		skip: offset,
+		take: limit,
+		include: { products: true },
+		orderBy: { createdAt: "desc" },
+	});
+	const totalCategories = await db.category.count();
+	return { categories, totalCategories };
+}
+
 export async function getCategory(id: string) {
 	try {
 		return await db.category.findUnique({ where: { id } });
@@ -54,9 +66,10 @@ export async function updateCategory(
 
 export async function deleteCategory(id: string) {
 	try {
-		return await db.category.delete({
+		await db.category.delete({
 			where: { id },
 		});
+		revalidatePath("/dashboard/categories");
 	} catch (error) {
 		console.log(error);
 	}

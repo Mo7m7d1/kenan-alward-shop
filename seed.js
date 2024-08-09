@@ -1,30 +1,31 @@
 const { PrismaClient } = require("@prisma/client");
+const { hashSync } = require("bcrypt");
 
 const db = new PrismaClient();
 
 async function seed() {
-	// const categories = [
-	// 	{
-	// 		title: "ورود طبيعية",
-	// 		description: "أجمل الورود الطبيعية المنسقة بعناية.",
-	// 	},
-	// 	{
-	// 		title: "ورود صناعية",
-	// 		description: "ورود صناعية فائقة الجودة تدوم طويلاً.",
-	// 	},
-	// 	{
-	// 		title: "تشكيلات زهور",
-	// 		description: "تشكيلات مميزة من الزهور والورود المتنوعة.",
-	// 	},
-	// 	{
-	// 		title: "ورود موسمية",
-	// 		description: "ورود موسمية متوفرة فقط خلال فترات معينة من السنة.",
-	// 	},
-	// 	{
-	// 		title: "باقات ورود",
-	// 		description: "باقات ورد جميلة تناسب جميع المناسبات.",
-	// 	},
-	// ];
+	const categories = [
+		{
+			title: "ورود طبيعية",
+			description: "أجمل الورود الطبيعية المنسقة بعناية.",
+		},
+		{
+			title: "ورود صناعية",
+			description: "ورود صناعية فائقة الجودة تدوم طويلاً.",
+		},
+		{
+			title: "تشكيلات زهور",
+			description: "تشكيلات مميزة من الزهور والورود المتنوعة.",
+		},
+		{
+			title: "ورود موسمية",
+			description: "ورود موسمية متوفرة فقط خلال فترات معينة من السنة.",
+		},
+		{
+			title: "باقات ورود",
+			description: "باقات ورد جميلة تناسب جميع المناسبات.",
+		},
+	];
 
 	const products = [
 		{
@@ -108,7 +109,7 @@ async function seed() {
 	];
 
 	try {
-		// const response = await db.category.createMany({ data: categories });
+		await db.category.createMany({ data: categories });
 		for (const p of products) {
 			await db.product.create({
 				data: {
@@ -117,11 +118,7 @@ async function seed() {
 				},
 			});
 		}
-		// if (response.success) {
 		console.log("seeded successfully");
-		// } else {
-		// 	console.error("Failed to seed", response.error);
-		// }
 	} catch (error) {
 		console.error("Error seeding:", error);
 	}

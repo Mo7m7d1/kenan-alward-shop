@@ -4,6 +4,24 @@ import { getProducts } from "@/server/models/product";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+	const category = params.category;
+
+	if (!category) {
+		return {
+			title: "ألقسم غير موجود",
+			description: "القسم غير موجود",
+		};
+	}
+
+	return {
+		title: `${category} - كنان الورد`,
+		description: category,
+	};
+}
+
 export default async function page({ params, searchParams }: any) {
 	if (!params.category || !searchParams.categoryName) {
 		return notFound();
@@ -14,15 +32,6 @@ export default async function page({ params, searchParams }: any) {
 				<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
 					قسم {decodeURIComponent(searchParams.categoryName) ?? ""}
 				</h2>
-
-				{/* <div className="flex gap-2">
-					<label htmlFor="filter">فلتر</label>
-					<select name="filter" id="filter">
-						<option value="1">1</option>
-						<option value="1">2</option>
-						<option value="1">3</option>
-					</select>
-				</div> */}
 			</section>
 
 			<Suspense key={params.category} fallback={<CategoryProductsSkeleton />}>

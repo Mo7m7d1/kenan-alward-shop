@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { db } from "../db";
 import { cache } from "react";
 import { normalizeArabic } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 type FilterProps = {
 	category?: string;
@@ -57,6 +58,21 @@ export const getProducts = cache(async (filters: FilterProps) => {
 		console.log(error);
 	}
 });
+
+export async function getPaginatedProducts(page = 1, limit = 10) {
+	const offset = (page - 1) * limit;
+	const products = await db.product.findMany({
+		skip: offset,
+		take: limit,
+		include: { orders: true },
+	});
+	const p = products.map((product) => ({
+		...product,
+		totalSales: product.orders.length || 0,
+	}));
+	const totalProducts = await db.product.count();
+	return { p, totalProducts };
+}
 
 export const getProduct = cache(async (id: string) => {
 	try {
@@ -167,9 +183,10 @@ export async function updateProduct(
 
 export async function deleteProduct(id: string) {
 	try {
-		return await db.product.delete({
+		await db.product.delete({
 			where: { id },
 		});
+		revalidatePath("/dashboard/products");
 	} catch (error) {
 		console.log(error);
 	}

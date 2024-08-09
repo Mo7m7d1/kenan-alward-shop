@@ -55,7 +55,7 @@ async function CustomerOrdersTable() {
 	}
 
 	return (
-		<Table className="scroll-my-14">
+		<Table className="scroll-my-14 max-h-96 pb-4">
 			<TableHeader>
 				<TableRow>
 					<TableHead className="text-right font-semibold">رقم الطلب</TableHead>

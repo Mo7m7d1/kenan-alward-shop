@@ -4,21 +4,21 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 const CustomersReviews: React.FC = () => {
 	const reviews = [
 		{
-			avatarSrc: "/images/empty.svg",
+			avatarSrc: "/images/placeholder.svg",
 			avatarFallback: "N",
 			name: "نوره",
 			rating: 3,
 			comment: "أحلى ورد، التعامل راقي والتوصيل سريع.",
 		},
 		{
-			avatarSrc: "/images/empty.svg",
+			avatarSrc: "/images/placeholder.svg",
 			avatarFallback: "A",
 			name: "أحمد خالد",
 			rating: 4,
 			comment: "ورودهم مره جميله وخدمة العملاء ممتازة.",
 		},
 		{
-			avatarSrc: "/images/empty.svg",
+			avatarSrc: "/images/placeholder.svg",
 			avatarFallback: "S",
 			name: "سالم",
 			rating: 5,

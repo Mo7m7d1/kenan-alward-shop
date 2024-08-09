@@ -8,6 +8,7 @@ import z from "zod";
 import { db } from "../db";
 import { Prisma } from "@prisma/client";
 import { getServerAuth } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 const zLoginSchema = z.object({
 	email: z.string().min(1, "الاسم مطلوب"),
@@ -118,6 +119,18 @@ export async function getUsers() {
 	}
 }
 
+export async function getPaginatedCustomers(page = 1, limit = 10) {
+	const offset = (page - 1) * limit;
+	const customers = await db.user.findMany({
+		skip: offset,
+		take: limit,
+		include: { orders: true },
+		orderBy: { createdAt: "desc" },
+	});
+	const totalCustomers = await db.user.count();
+	return { customers, totalCustomers };
+}
+
 export async function getUser() {
 	try {
 		const session = await getServerAuth();
@@ -169,6 +182,7 @@ export async function updateUser(
 export async function deleteUser(id: string): Promise<UserResponse> {
 	try {
 		await db.user.delete({ where: { id } });
+		revalidatePath("/dashboard/customers");
 		return { success: true };
 	} catch (error) {
 		return { success: false, error: (error as Error).message };

@@ -5,6 +5,29 @@ import { getProduct, getProducts } from "@/server/models/product";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+	const product = await getProduct(params.product);
+
+	if (!product) {
+		return {
+			title: "المنتج غير موجود",
+			description: "المنتج غير موجود",
+		};
+	}
+
+	return {
+		title: `${product.title} - كنان الورد`,
+		description: product.description,
+		openGraph: {
+			title: `${product.title} - كنان الورد`,
+			description: product.description || "",
+			images: product.images?.[0] ? [{ url: product.images[0] }] : undefined,
+		},
+	};
+}
+
 export default async function page({ params }: any) {
 	if (!params.product) return notFound();
 
